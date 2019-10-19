@@ -1,0 +1,17 @@
+{
+  "name": "dolphinspectrogramapp",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "rollup -c rollup.config.js --watch src"
+  },
+  "dependencies": {
+    "rollup": "^1.25.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-livereload": "^1.0.4",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-serve": "^1.0.1",
+    "wavesurfer.js": "^3.1.0"
+  },
+  "devDependencies": {}
+}
