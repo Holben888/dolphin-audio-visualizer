@@ -15,4 +15,4 @@ document.addEventListener('click', event => {
   }
 })
 
-wave.load('example-media/song.mp3')
+wave.load('example-media/dolphin-1.m4a')
