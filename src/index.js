@@ -1,9 +1,16 @@
 import WaveSurfer from 'wavesurfer.js'
+import Spectrogram from 'wavesurfer.js/src/plugin/spectrogram'
 
 const wave = WaveSurfer.create({
   container: '#waveform',
   waveColor: '#ddd',
   progressColor: '#333',
+  plugins: [
+    Spectrogram.create({
+      container: '#spectrogram',
+      labels: true,
+    }),
+  ],
 })
 
 document.addEventListener('click', event => {
