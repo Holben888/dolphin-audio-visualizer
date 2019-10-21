@@ -22,4 +22,4 @@ document.addEventListener('click', event => {
   }
 })
 
-wave.load('example-media/dolphin-1.m4a')
+wave.load('example-media/dolphin-2.wav')
