@@ -1,0 +1,40 @@
+{
+  "audio-file" : "dolphin-2.wav",
+  "anootations" : [
+    {
+    "start" : 0.3,
+    "end" : 0.9,
+    "label" : "Sotirios"
+    },
+    {
+      "start": 1.4,
+      "end": 2.4,
+      "label": "Nicolatis"
+    },
+    {
+      "start": 2.7,
+      "end": 2.9,
+      "label": "Minos"
+    },
+    {
+      "start": 3.4,
+      "end": 3.8,
+      "label": "Stamatos"
+    },
+    {
+      "start": 4.9,
+      "end": 5.7,
+      "label": "Rondoulis"
+    },
+    {
+      "start": 6,
+      "end": 6.7,
+      "label": "Thanassis"
+    },
+    {
+      "start": 8,
+      "end": 8.8,
+      "label": "Lykourgos"
+    }
+  ]
+}
