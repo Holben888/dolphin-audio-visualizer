@@ -1,10 +1,10 @@
 {
-  "audio-file" : "dolphin-2.wav",
-  "anootations" : [
+  "audio-file": "dolphin-2.wav",
+  "annotations": [
     {
-    "start" : 0.3,
-    "end" : 0.9,
-    "label" : "Sotirios"
+      "start": 0.3,
+      "end": 0.9,
+      "label": "Sotirios"
     },
     {
       "start": 1.4,
