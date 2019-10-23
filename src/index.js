@@ -61,15 +61,6 @@ const createAnnotationTimeline = () => {
   })
 }
 
-document.addEventListener('click', event => {
-  if (event.target.id === 'play') {
-    wave.play()
-  }
-  if (event.target.id === 'pause') {
-    wave.pause()
-  }
-})
-
 wave.load('./example-media/' + audioInfo['audio-file'])
 
 wave.on('ready', () => {
@@ -79,24 +70,30 @@ wave.on('ready', () => {
   document.getElementById('loading').style.display = 'none'
 })
 
+// When region is playing, show the corresponding annotation
 wave.on('region-in', region => {
   const annotation = document.getElementById('annotation')
   annotation.innerText = region.data.annotation
 })
 
 wave.on('region-created', region => {
+  // Find region by start time
   const match = annotationRegions.find(
     annotation => annotation.start === region.start
   )
-  // add the "region" object to the annotation list item to allow playback
+  // Add the "region" object to the annotation list item to access playback methods later
   match.region = region
 })
 
-wave.on('region-click', (region, event) => {
-  event.stopPropagation()
-  // Play on click, loop on shift click
-  event.shiftKey ? region.playLoop() : region.play()
-  annotation.innerText = region.data.annotation
+wave.on('audioprocess', playbackTime => {
+  const playbackTimeEl = document.getElementById('playback-time')
+  playbackTimeEl.innerText = playbackTime.toFixed(2) + 's'
+})
+
+wave.on('seek', percentScrubbed => {
+  const playbackTime = audioInfo['audio-length'] * percentScrubbed
+  const playbackTimeEl = document.getElementById('playback-time')
+  playbackTimeEl.innerText = playbackTime.toFixed(2) + 's'
 })
 
 document.addEventListener('click', event => {
