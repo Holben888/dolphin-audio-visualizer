@@ -31,6 +31,27 @@ const createRegionsFromAnnotations = () => {
   })
 }
 
+const createAnnotationTimeline = () => {
+  const audioLength = audioInfo['audio-length']
+  const timeline = document.getElementById('timeline')
+
+  audioInfo.annotations.forEach(annotation => {
+    const percentStart = (annotation.start / audioLength) * 100
+    const percentEnd = (annotation.end / audioLength) * 100
+    const elPercentWidth = percentEnd - percentStart
+
+    const annotationRegion = document.createElement('div')
+    annotationRegion.innerText = annotation.label
+    annotationRegion.className = 'timeline-region'
+    annotationRegion.style.cssText = `
+      width: ${elPercentWidth}%;
+      left: ${percentStart}%;
+      background-color: green;
+    `
+    timeline.appendChild(annotationRegion)
+  })
+}
+
 document.addEventListener('click', event => {
   if (event.target.id === 'play') {
     wave.play()
@@ -45,6 +66,7 @@ wave.load('./example-media/' + audioInfo['audio-file'])
 wave.on('ready', () => {
   document.getElementById('loading').style.display = 'none'
   createRegionsFromAnnotations()
+  createAnnotationTimeline()
 })
 
 wave.on('region-in', region => {

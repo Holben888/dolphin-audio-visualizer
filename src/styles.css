@@ -32,6 +32,21 @@ html {
   animation-delay: 0.667s;
 }
 
+#timeline {
+  position: relative;
+  height: 30px;
+}
+
+#timeline > .timeline-region {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* 
 ATTEMPT TO EXTEND REGIONS TO COVER SPECTROGRAM (CLOSE, BUT FAILED)
 #waveform {
