@@ -17,7 +17,19 @@ const wave = WaveSurfer.create({
   ],
 })
 
-wave.load('./example-media/' + audioInfo['audio-file'])
+const createRegionsFromAnnotations = () => {
+  audioInfo.annotations.forEach(annotation => {
+    wave.addRegion({
+      start: annotation.start,
+      end: annotation.end,
+      color: getRandomColor(0.2),
+      drag: false,
+      data: {
+        annotation: annotation.label,
+      },
+    })
+  })
+}
 
 document.addEventListener('click', event => {
   if (event.target.id === 'play') {
@@ -28,17 +40,23 @@ document.addEventListener('click', event => {
   }
 })
 
+wave.load('./example-media/' + audioInfo['audio-file'])
+
 wave.on('ready', () => {
-  audioInfo.annotations.forEach(annotation => {
-    annotation.color = getRandomColor(0.1)
-    wave.addRegion(annotation)
-  })
+  document.getElementById('loading').style.display = 'none'
+  createRegionsFromAnnotations()
+})
+
+wave.on('region-in', region => {
+  const annotation = document.getElementById('annotation')
+  annotation.innerText = region.data.annotation
 })
 
 wave.on('region-click', (region, event) => {
   event.stopPropagation()
   // Play on click, loop on shift click
   event.shiftKey ? region.playLoop() : region.play()
+  annotation.innerText = region.data.annotation
 })
 
 document.addEventListener('click', event => {

@@ -1,3 +1,58 @@
 html {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+#loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#loading > img {
+  height: 50px;
+  width: 50px;
+  margin: 30px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+#loading > img.anim-delay-1 {
+  animation-delay: 0.333s;
+}
+
+#loading > img.anim-delay-2 {
+  animation-delay: 0.667s;
+}
+
+/* 
+ATTEMPT TO EXTEND REGIONS TO COVER SPECTROGRAM (CLOSE, BUT FAILED)
+#waveform {
+  height: 250px;
+  margin-bottom: -125px;
+  position: relative;
+  z-index: 1;
+}
+
+#waveform wave {
+  position: static !important;
+}
+
+#waveform wave > canvas {
+  height: 50% !important;
+}
+
+#waveform region {
+  z-index: 999 !important;
+}
+
+#spectrogram {
+  z-index: -1;
+} */

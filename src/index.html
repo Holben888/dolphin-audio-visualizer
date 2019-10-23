@@ -4,11 +4,17 @@
   </head>
   <body>
     <h1>Dolphin Audio Visualizer</h1>
-    <div id="waveform"></div>
-    <div id="wave-timeline"></div>
+    <div id="waveform">
+      <div id="loading">
+        <img src="./icons/dolphin.svg" alt="dolphin" />
+        <img class="anim-delay-1" src="./icons/dolphin.svg" alt="dolphin" />
+        <img class="anim-delay-2" src="./icons/dolphin.svg" alt="dolphin" />
+      </div>
+    </div>
     <div id="spectrogram"></div>
     <button id="play">Play</button>
     <button id="pause">Pause</button>
+    <p id="annotation"></p>
   </body>
   <script src="build/main.js"></script>
 </html>
