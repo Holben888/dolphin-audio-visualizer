@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "main": "src/index.js",
   "scripts": {
-    "start": "rollup -c rollup.config.js --watch src"
+    "start": "rollup -c rollup.config.js --watch src",
+    "deploy": "surge --project ./src --domain dolphinaudiovisualizer.surge.sh"
   },
   "dependencies": {
     "rollup": "^1.25.0",
