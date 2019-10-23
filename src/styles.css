@@ -2,6 +2,12 @@ html {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+button {
+  font-size: 14px;
+  border: none;
+  background: none;
+}
+
 #loading {
   display: flex;
   justify-content: center;
@@ -52,6 +58,23 @@ html {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+section.playback {
+  display: flex;
+  align-items: center;
+}
+
+section.playback > button {
+  margin: 20px;
+  background: #3483eb;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+}
+
+section.playback > #playback-time {
+  width: 50px;
 }
 
 /* 
