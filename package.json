@@ -8,6 +8,7 @@
   "dependencies": {
     "rollup": "^1.25.0",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.4",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-serve": "^1.0.1",
