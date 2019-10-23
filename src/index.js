@@ -17,12 +17,20 @@ const wave = WaveSurfer.create({
   ],
 })
 
+const annotationRegions = audioInfo.annotations
+
+const addColorsToAnnotations = () => {
+  annotationRegions.forEach(
+    annotation => (annotation.color = getRandomColor(0.2))
+  )
+}
+
 const createRegionsFromAnnotations = () => {
-  audioInfo.annotations.forEach(annotation => {
+  annotationRegions.forEach(annotation => {
     wave.addRegion({
       start: annotation.start,
       end: annotation.end,
-      color: getRandomColor(0.2),
+      color: annotation.color,
       drag: false,
       data: {
         annotation: annotation.label,
@@ -35,18 +43,19 @@ const createAnnotationTimeline = () => {
   const audioLength = audioInfo['audio-length']
   const timeline = document.getElementById('timeline')
 
-  audioInfo.annotations.forEach(annotation => {
+  annotationRegions.forEach((annotation, index) => {
     const percentStart = (annotation.start / audioLength) * 100
     const percentEnd = (annotation.end / audioLength) * 100
     const elPercentWidth = percentEnd - percentStart
 
-    const annotationRegion = document.createElement('div')
+    const annotationRegion = document.createElement('button')
     annotationRegion.innerText = annotation.label
+    annotationRegion.setAttribute('data-index', index) // add an index attr to each button to see which was clicked
     annotationRegion.className = 'timeline-region'
     annotationRegion.style.cssText = `
       width: ${elPercentWidth}%;
       left: ${percentStart}%;
-      background-color: green;
+      background-color: ${annotation.color};
     `
     timeline.appendChild(annotationRegion)
   })
@@ -64,14 +73,23 @@ document.addEventListener('click', event => {
 wave.load('./example-media/' + audioInfo['audio-file'])
 
 wave.on('ready', () => {
-  document.getElementById('loading').style.display = 'none'
+  addColorsToAnnotations()
   createRegionsFromAnnotations()
   createAnnotationTimeline()
+  document.getElementById('loading').style.display = 'none'
 })
 
 wave.on('region-in', region => {
   const annotation = document.getElementById('annotation')
   annotation.innerText = region.data.annotation
+})
+
+wave.on('region-created', region => {
+  const match = annotationRegions.find(
+    annotation => annotation.start === region.start
+  )
+  // add the "region" object to the annotation list item to allow playback
+  match.region = region
 })
 
 wave.on('region-click', (region, event) => {
@@ -87,5 +105,9 @@ document.addEventListener('click', event => {
   }
   if (event.target.id === 'pause') {
     wave.pause()
+  }
+  if (event.target.attributes['data-index']) {
+    const annotationIndex = event.target.attributes['data-index'].value
+    annotationRegions[annotationIndex].region.play()
   }
 })
