@@ -34,7 +34,8 @@ html {
 
 #timeline {
   position: relative;
-  height: 30px;
+  height: 50px;
+  margin-top: 30px;
 }
 
 #timeline > .timeline-region {
@@ -42,6 +43,12 @@ html {
   top: 0;
   left: 0;
   height: 100%;
+  padding: 10px 10px;
+  border-radius: 5px;
+  border: 2px solid rgba(20, 20, 20, 0.1);
+  border-style: inset;
+  font-size: 14px;
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
