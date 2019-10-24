@@ -38,13 +38,13 @@ button {
   animation-delay: 0.667s;
 }
 
-#timeline {
+#annotations {
   position: relative;
   height: 50px;
   margin-top: 30px;
 }
 
-#timeline > .timeline-region {
+#annotations > .timeline-region {
   position: absolute;
   top: 0;
   left: 0;

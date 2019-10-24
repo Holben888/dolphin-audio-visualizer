@@ -41,7 +41,7 @@ const createRegionsFromAnnotations = () => {
 
 const createAnnotationTimeline = () => {
   const audioLength = audioInfo['audio-length']
-  const timeline = document.getElementById('timeline')
+  const annotationEl = document.getElementById('annotations')
 
   annotationRegions.forEach((annotation, index) => {
     const percentStart = (annotation.start / audioLength) * 100
@@ -57,7 +57,7 @@ const createAnnotationTimeline = () => {
       left: ${percentStart}%;
       background-color: ${annotation.color};
     `
-    timeline.appendChild(annotationRegion)
+    annotationEl.appendChild(annotationRegion)
   })
 }
 
@@ -68,7 +68,12 @@ wave.on('ready', () => {
   createRegionsFromAnnotations()
   createAnnotationTimeline()
   document.getElementById('loading').style.display = 'none'
+
+  audioInfo['audio-length'] * 300
 })
+
+// Set scale of waveform / spectrogram to 6x
+wave.zoom(300)
 
 // When region is playing, show the corresponding annotation
 wave.on('region-in', region => {
