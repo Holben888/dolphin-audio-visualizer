@@ -39,7 +39,7 @@ const createRegionsFromAnnotations = () => {
   })
 }
 
-const createAnnotationTimeline = () => {
+const createAnnotationTimeline = el => {
   const audioLength = audioInfo['audio-length']
   const annotationEl = document.getElementById('annotations')
 
@@ -64,8 +64,14 @@ const createAnnotationTimeline = () => {
 wave.load('./example-media/' + audioInfo['audio-file'])
 
 wave.on('ready', () => {
+  const annotationTimeline = document.createElement('section')
+  annotationTimeline.id = 'annotations'
+  createRegionsFromAnnotations(annotationTimeline)
+  document.querySelector('#waveform > wave').appendChild(annotationTimeline)
+  annotationTimeline.style.width = audioInfo['audio-length'] * 300 + 'px'
+
+  console.dir(document.querySelectorAll('#waveform > wave > canvas'))
   addColorsToAnnotations()
-  createRegionsFromAnnotations()
   createAnnotationTimeline()
   document.getElementById('loading').style.display = 'none'
 
