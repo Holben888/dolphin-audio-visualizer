@@ -25,8 +25,11 @@ button {
   0% {
     transform: scale(1);
   }
-  50% {
+  30% {
     transform: scale(1.2);
+  }
+  60% {
+    transform: scale(1);
   }
 }
 
@@ -38,11 +41,15 @@ button {
   animation-delay: 0.667s;
 }
 
-#annotations {
-  position: absolute;
+.annotationContainer {
+  margin-top: 15px;
   height: 50px;
-  bottom: 0;
-  z-index: 999;
+  overflow-x: hidden;
+}
+
+#annotations {
+  position: relative;
+  height: 100%;
 }
 
 #annotations > .timeline-region {
@@ -59,15 +66,7 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-#waveform > wave {
-  height: 256px !important;
-}
-
-#waveform > wave canvas,
-#waveform > wave region {
-  height: 128px !important;
+  z-index: inherit;
 }
 
 section.playback {
@@ -86,28 +85,3 @@ section.playback > button {
 section.playback > #playback-time {
   width: 50px;
 }
-
-/* 
-ATTEMPT TO EXTEND REGIONS TO COVER SPECTROGRAM (CLOSE, BUT FAILED)
-#waveform {
-  height: 250px;
-  margin-bottom: -125px;
-  position: relative;
-  z-index: 1;
-}
-
-#waveform wave {
-  position: static !important;
-}
-
-#waveform wave > canvas {
-  height: 50% !important;
-}
-
-#waveform region {
-  z-index: 999 !important;
-}
-
-#spectrogram {
-  z-index: -1;
-} */
