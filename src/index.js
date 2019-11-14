@@ -61,16 +61,18 @@ const createAnnotationTimeline = el => {
   })
 }
 
+wave.on('scroll', event => {
+  const annotationEl = document.getElementById('annotations')
+  annotationEl.style.left = `-${event.target.scrollLeft}px`
+})
+
 wave.load('./example-media/' + audioInfo['audio-file'])
 
 wave.on('ready', () => {
-  const annotationTimeline = document.createElement('section')
-  annotationTimeline.id = 'annotations'
-  createRegionsFromAnnotations(annotationTimeline)
-  document.querySelector('#waveform > wave').appendChild(annotationTimeline)
+  const annotationTimeline = document.getElementById('annotations')
   annotationTimeline.style.width = audioInfo['audio-length'] * 300 + 'px'
+  createRegionsFromAnnotations(annotationTimeline)
 
-  console.dir(document.querySelectorAll('#waveform > wave > canvas'))
   addColorsToAnnotations()
   createAnnotationTimeline()
   document.getElementById('loading').style.display = 'none'
@@ -116,6 +118,15 @@ document.addEventListener('click', event => {
   }
   if (event.target.attributes['data-index']) {
     const annotationIndex = event.target.attributes['data-index'].value
+    wave.pause()
     annotationRegions[annotationIndex].region.play()
+    event.stopImmediatePropagation()
+  }
+})
+
+document.addEventListener('keydown', event => {
+  if (event.key === ' ') {
+    event.preventDefault()
+    wave.playPause()
   }
 })
