@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "main": "src/index.js",
   "scripts": {
-    "start": "rollup -c rollup.config.js --watch src",
+    "start": "rollup -c rollup.config.js --watch src --format iife",
     "deploy": "surge --project ./src --domain dolphinaudiovisualizer.surge.sh"
   },
   "dependencies": {
+    "@babel/core": "^7.7.2",
     "rollup": "^1.25.0",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-livereload": "^1.0.4",
@@ -15,5 +17,10 @@
     "rollup-plugin-serve": "^1.0.1",
     "wavesurfer.js": "^3.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-transform-arrow-functions": "^7.2.0",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-stage-0": "^7.0.0"
+  }
 }
