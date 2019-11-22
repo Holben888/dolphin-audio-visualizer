@@ -1,132 +1,106 @@
-import WaveSurfer from 'wavesurfer.js'
-import SpectrogramPlugin from 'wavesurfer.js/src/plugin/spectrogram'
-import RegionPlugin from 'wavesurfer.js/src/plugin/regions'
-import audioInfo from './example-media-annotations/dolphin-2.json'
-import { getRandomColor } from './helpers'
+import WaveSurfer from 'wavesurfer.js';
+import SpectrogramPlugin from 'wavesurfer.js/src/plugin/spectrogram';
+import RegionPlugin from 'wavesurfer.js/src/plugin/regions';
+// import TimelinePlugin from 'wavesurfer.js/src/plugin/timeline';
+import {
+  audioFile,
+  audioLength,
+  timelines,
+} from './example-media/dolphin.json';
+import { constructTimelines } from './timlineConstructor';
 
-const wave = WaveSurfer.create({
-  container: '#waveform',
-  waveColor: '#ddd',
-  progressColor: '#333',
-  plugins: [
-    RegionPlugin.create(),
-    SpectrogramPlugin.create({
-      container: '#spectrogram',
-      labels: true,
-    }),
-  ],
-})
+const createPlaybackRegion = (wave, region) => {
+  wave.clearRegions();
+  const displayRegion = wave.addRegion({
+    start: region.start,
+    end: region.end,
+    color: region.color,
+    drag: false,
+  });
+  displayRegion.play();
+};
 
-const annotationRegions = audioInfo.annotations
-
-const addColorsToAnnotations = () => {
-  annotationRegions.forEach(
-    annotation => (annotation.color = getRandomColor(0.2))
-  )
-}
-
-const createRegionsFromAnnotations = () => {
-  annotationRegions.forEach(annotation => {
-    wave.addRegion({
-      start: annotation.start,
-      end: annotation.end,
-      color: annotation.color,
-      drag: false,
-      data: {
-        annotation: annotation.label,
-      },
-    })
-  })
-}
-
-const createAnnotationTimeline = el => {
-  const audioLength = audioInfo['audio-length']
-  const annotationEl = document.getElementById('annotations')
-
-  annotationRegions.forEach((annotation, index) => {
-    const percentStart = (annotation.start / audioLength) * 100
-    const percentEnd = (annotation.end / audioLength) * 100
-    const elPercentWidth = percentEnd - percentStart
-
-    const annotationRegion = document.createElement('button')
-    annotationRegion.innerText = annotation.label
-    annotationRegion.setAttribute('data-index', index) // add an index attr to each button to see which was clicked
-    annotationRegion.className = 'timeline-region'
-    annotationRegion.style.cssText = `
-      width: ${elPercentWidth}%;
-      left: ${percentStart}%;
-      background-color: ${annotation.color};
-    `
-    annotationEl.appendChild(annotationRegion)
-  })
-}
-
-wave.on('scroll', event => {
-  const annotationEl = document.getElementById('annotations')
-  annotationEl.style.left = `-${event.target.scrollLeft}px`
-})
-
-wave.load('./example-media/' + audioInfo['audio-file'])
-
-wave.on('ready', () => {
-  const annotationTimeline = document.getElementById('annotations')
-  annotationTimeline.style.width = audioInfo['audio-length'] * 300 + 'px'
-  createRegionsFromAnnotations(annotationTimeline)
-
-  addColorsToAnnotations()
-  createAnnotationTimeline()
-  document.getElementById('loading').style.display = 'none'
-
-  audioInfo['audio-length'] * 300
-})
-
-// Set scale of waveform / spectrogram to 6x
-wave.zoom(300)
-
-// When region is playing, show the corresponding annotation
-wave.on('region-in', region => {
-  const annotation = document.getElementById('annotation')
-  annotation.innerText = region.data.annotation
-})
-
-wave.on('region-created', region => {
-  // Find region by start time
-  const match = annotationRegions.find(
-    annotation => annotation.start === region.start
-  )
-  // Add the "region" object to the annotation list item to access playback methods later
-  match.region = region
-})
-
-wave.on('audioprocess', playbackTime => {
-  const playbackTimeEl = document.getElementById('playback-time')
-  playbackTimeEl.innerText = playbackTime.toFixed(2) + 's'
-})
-
-wave.on('seek', percentScrubbed => {
-  const playbackTime = audioInfo['audio-length'] * percentScrubbed
-  const playbackTimeEl = document.getElementById('playback-time')
-  playbackTimeEl.innerText = playbackTime.toFixed(2) + 's'
-})
-
-document.addEventListener('click', event => {
-  if (event.target.id === 'play') {
-    wave.play()
+const highlightRegionsCurrentlyPlaying = playbackTime => {
+  const regionEls = document.getElementsByClassName('timeline-region');
+  for (const regionEl of regionEls) {
+    const startTime = regionEl.getAttribute('data-start');
+    const endTime = regionEl.getAttribute('data-end');
+    if (startTime <= playbackTime && endTime >= playbackTime) {
+      regionEl.classList.add('highlighted');
+    } else {
+      regionEl.classList.remove('highlighted');
+    }
   }
-  if (event.target.id === 'pause') {
-    wave.pause()
-  }
-  if (event.target.attributes['data-index']) {
-    const annotationIndex = event.target.attributes['data-index'].value
-    wave.pause()
-    annotationRegions[annotationIndex].region.play()
-    event.stopImmediatePropagation()
-  }
-})
+};
 
-document.addEventListener('keydown', event => {
-  if (event.key === ' ') {
-    event.preventDefault()
-    wave.playPause()
-  }
-})
+(function init() {
+  const zoomFactor = 300; // zoom into waveform 6x original amount
+  const timelineContainerEl = document.getElementById('timeline-container');
+  timelineContainerEl.style.width = audioLength * zoomFactor + 'px';
+
+  const wave = WaveSurfer.create({
+    container: '#waveform',
+    waveColor: '#ddd',
+    progressColor: '#333',
+    plugins: [
+      RegionPlugin.create(),
+      SpectrogramPlugin.create({
+        container: '#spectrogram',
+        labels: true,
+      }),
+    ],
+  });
+
+  wave.load('./example-media/' + audioFile);
+  wave.zoom(zoomFactor);
+
+  wave.on('ready', () => {
+    const timelinesFormatted = constructTimelines(timelines, audioLength);
+    document.getElementById('loading').style.display = 'none';
+    highlightRegionsCurrentlyPlaying(0);
+
+    document.addEventListener('click', ({ target }) => {
+      if (target.id === 'play') {
+        wave.play();
+      }
+      if (target.id === 'pause') {
+        wave.pause();
+      }
+      if (target.attributes['data-index']) {
+        const timelineName = target.attributes['data-name'].value;
+        const regionIndex = target.attributes['data-index'].value;
+        const matchingTimeline = timelinesFormatted.find(
+          timeline => timeline.name === timelineName
+        );
+        const region = matchingTimeline.regions[regionIndex];
+        createPlaybackRegion(wave, region);
+      }
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === ' ') {
+        event.preventDefault();
+        wave.playPause();
+      }
+    });
+
+    const playbackHandler = playbackTime => {
+      const playbackTimeEl = document.getElementById('playback-time');
+      playbackTimeEl.innerText = playbackTime.toFixed(2) + 's';
+      highlightRegionsCurrentlyPlaying(playbackTime);
+    };
+
+    // Update current playback time as audio plays
+    wave.on('audioprocess', playbackTime => playbackHandler(playbackTime));
+
+    // Update current playback time when user manually moves playhead
+    wave.on('seek', percentScrubbed =>
+      playbackHandler(percentScrubbed * audioLength)
+    );
+  });
+
+  // Update scroll position of the timelines as audio plays
+  wave.on('scroll', event => {
+    timelineContainerEl.style.left = `-${event.target.scrollLeft}px`;
+  });
+})();

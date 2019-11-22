@@ -8,6 +8,10 @@ button {
   background: none;
 }
 
+.main-content {
+  margin-left: 20px;
+}
+
 #loading {
   display: flex;
   justify-content: center;
@@ -41,18 +45,30 @@ button {
   animation-delay: 0.667s;
 }
 
-.annotationContainer {
-  margin-top: 15px;
-  height: 50px;
-  overflow-x: hidden;
-}
-
-#annotations {
+.timeline-scrollbox {
   position: relative;
-  height: 100%;
+  margin-top: 30px;
+  overflow-x: hidden;
+  padding-top: 70px;
 }
 
-#annotations > .timeline-region {
+.timeline-scrollbox > h2 {
+  position: absolute;
+  top: 0;
+}
+
+#timeline-container {
+  position: relative;
+}
+
+#timeline-container > .timeline {
+  position: relative;
+  height: 50px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+#timeline-container > .timeline > .timeline-region {
   position: absolute;
   top: 0;
   left: 0;
@@ -67,6 +83,14 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   z-index: inherit;
+
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+#timeline-container > .timeline > .timeline-region.highlighted {
+  opacity: 1;
+  font-weight: bold;
 }
 
 section.playback {
@@ -84,4 +108,13 @@ section.playback > button {
 
 section.playback > #playback-time {
   width: 50px;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
 }
